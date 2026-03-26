@@ -1,0 +1,26 @@
+# Python 
+__pycache__/ 
+*.pyc 
+*.pyo 
+ECHO is on.
+# Model files (too large for GitHub) 
+*.pth 
+*.pt 
+*.h5 
+ECHO is on.
+# Data files (keep locally only) 
+data/ 
+ECHO is on.
+# Uploaded images 
+uploads/ 
+ECHO is on.
+# Jupyter notebooks 
+.ipynb_checkpoints/ 
+ECHO is on.
+# IDE 
+.vscode/ 
+.idea/ 
+ECHO is on.
+# OS 
+.DS_Store 
+Thumbs.db 

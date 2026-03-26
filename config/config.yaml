@@ -1,0 +1,5 @@
+data:
+  root: "data/chest_xray"
+  train_dir: "train"
+  val_dir: "val"
+  test_dir: "test"
