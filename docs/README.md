@@ -2,7 +2,6 @@
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.0+-red.svg)](https://pytorch.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.104+-green.svg)](https://fastapi.tiangolo.com/)
 [![React](https://img.shields.io/badge/React-18-blue.svg)](https://reactjs.org/)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 # Pneumonia Detection from Chest X-rays
 
@@ -257,7 +256,7 @@ Then open: `http://localhost:3000`
 
 **Port already in use:**
 ```bash
-# Change port in backend/app.py (line 134)
+# Change port in backend/app.py
 port=8000  # Change to 8001 or any available port
 ```
 
@@ -276,7 +275,7 @@ port=8000  # Change to 8001 or any available port
 
 ---
 
-## 🧪 Training Your Own Models
+## Training Your Own Models
 
 **Train Baseline CNN:**
 ```bash
