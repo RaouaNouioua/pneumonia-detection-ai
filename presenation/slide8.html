@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ResNet18 Architecture &amp; Training</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&amp;family=Open+Sans:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            background-color: #ffffff;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        /* Header Style */
+        .header {
+            height: 120px;
+            padding: 0 60px;
+            display: flex;
+            align-items: center;
+            background-color: #ffffff;
+            border-bottom: 4px solid #f1f5f9;
+            flex-shrink: 0;
+            z-index: 10;
+        }
+        .header-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 42px;
+            color: #1e293b;
+            position: relative;
+            padding-left: 24px;
+        }
+        .header-title::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 48px;
+            background-color: #8b5cf6; /* Changed to Purple for Transfer Learning */
+            border-radius: 4px;
+        }
+
+        /* Main Content Layout */
+        .content-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 40px 60px;
+            background-color: #f8fafc;
+        }
+
+        /* Section 1: Architecture Diagram */
+        .diagram-container {
+            flex: 3;
+            background-color: #ffffff;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+            padding: 20px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .diagram-label {
+            position: absolute;
+            top: 16px;
+            left: 24px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            color: #64748b;
+            text-transform: uppercase;
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+
+        .pipeline-flow {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 40px;
+            gap: 20px;
+        }
+
+        /* Diagram Nodes */
+        .node {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 150px;
+            position: relative;
+            transition: transform 0.2s;
+        }
+        
+        .node-box {
+            width: 100%;
+            background-color: #ffffff;
+            border: 2px solid #cbd5e1;
+            border-radius: 12px;
+            padding: 15px 10px;
+            text-align: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            z-index: 2;
+            min-height: 90px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .node-title {
+            font-weight: 700;
+            color: #1e293b;
+            font-size: 16px;
+            margin-bottom: 8px;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .node-detail {
+            font-size: 12px;
+            color: #64748b;
+            background-color: #f1f5f9;
+            padding: 4px 8px;
+            border-radius: 4px;
+            margin-top: 4px;
+            display: block;
+        }
+
+        /* Specific Node Styling */
+        .node-input .node-box {
+            border-color: #94a3b8;
+            border-style: dashed;
+        }
+        
+        /* Frozen Layers */
+        .node-frozen .node-box {
+            border-top: 5px solid #64748b;
+            background-color: #f8fafc;
+            border-color: #e2e8f0;
+        }
+        .node-frozen .node-title {
+            color: #475569;
+        }
+        
+        /* Trainable Layers */
+        .node-trainable .node-box {
+            border-top: 5px solid #8b5cf6; /* purple */
+            border-color: #ddd6fe;
+            background-color: #fff;
+            box-shadow: 0 10px 15px -3px rgba(139, 92, 246, 0.1);
+            transform: scale(1.05);
+        }
+
+        .node-output .node-box {
+            border-color: #10b981; /* green */
+            background-color: #f0fdf4;
+        }
+
+        .arrow-connector {
+            width: 40px;
+            height: 2px;
+            background-color: #cbd5e1;
+            position: relative;
+        }
+        .arrow-connector::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            border-left: 8px solid #cbd5e1;
+            border-top: 6px solid transparent;
+            border-bottom: 6px solid transparent;
+        }
+
+        /* Section 2: Info Cards */
+        .details-row {
+            flex: 2;
+            display: flex;
+            gap: 30px;
+        }
+
+        .detail-card {
+            flex: 1;
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 24px;
+            border-left: 5px solid #cbd5e1;
+            box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+            color: #334155;
+        }
+        
+        .card-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            font-size: 18px;
+        }
+
+        .card-title {
+            font-weight: 700;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 18px;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 10px;
+            font-size: 15px;
+            color: #475569;
+            line-height: 1.4;
+        }
+        
+        .feature-item i {
+            margin-right: 10px;
+            margin-top: 4px;
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
+        /* Specific Colors for Cards */
+        .card-model { border-color: #8b5cf6; }
+        .card-model .card-icon { background-color: #f3e8ff; color: #8b5cf6; }
+        
+        .card-training { border-color: #0ea5e9; }
+        .card-training .card-icon { background-color: #e0f2fe; color: #0ea5e9; }
+        
+        .card-strategy { border-color: #f59e0b; }
+        .card-strategy .card-icon { background-color: #fffbeb; color: #f59e0b; }
+
+        /* Badge for frozen status */
+        .status-badge {
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-bottom: 4px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .status-frozen { background-color: #cbd5e1; color: #475569; }
+        .status-trainable { background-color: #8b5cf6; color: white; }
+
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Header -->
+<div class="header">
+<h1 class="header-title">ResNet18 Architecture &amp; Training</h1>
+</div>
+<!-- Main Content -->
+<div class="content-area">
+<!-- Top: Architecture Diagram -->
+<div class="diagram-container">
+<div class="diagram-label">Transfer Learning Pipeline</div>
+<div class="pipeline-flow">
+<!-- Input -->
+<div class="node node-input">
+<div class="node-box">
+<i class="fas fa-image" style="font-size: 24px; color: #64748b; margin-bottom: 8px;"></i>
+<div class="node-title">Input</div>
+<span class="node-detail">224×224×3</span>
+</div>
+</div>
+<!-- Arrow -->
+<div class="arrow-connector"></div>
+<!-- Frozen Backbone -->
+<div class="node node-frozen" style="width: 200px;">
+<div class="node-box">
+<span class="status-badge status-frozen"><i class="fas fa-lock mr-1"></i> Frozen</span>
+<div class="node-title">ResNet18 Backbone</div>
+<span class="node-detail">Layers 1-4 (ImageNet)</span>
+<span class="node-detail">11.2M Parameters</span>
+</div>
+</div>
+<!-- Arrow -->
+<div class="arrow-connector"></div>
+<!-- Global Pooling -->
+<div class="node node-frozen">
+<div class="node-box">
+<span class="status-badge status-frozen"><i class="fas fa-lock mr-1"></i> Frozen</span>
+<div class="node-title">Avg Pool</div>
+<span class="node-detail">Feature Extraction</span>
+</div>
+</div>
+<!-- Arrow -->
+<div class="arrow-connector"></div>
+<!-- Trainable Head -->
+<div class="node node-trainable">
+<div class="node-box">
+<span class="status-badge status-trainable"><i class="fas fa-fire mr-1"></i> Trainable</span>
+<div class="node-title">New FC Layer</div>
+<span class="node-detail">Linear (512 → 2)</span>
+<span class="node-detail">1,026 Parameters</span>
+</div>
+</div>
+<!-- Arrow -->
+<div class="arrow-connector"></div>
+<!-- Output -->
+<div class="node node-output">
+<div class="node-box">
+<div class="node-title">Output</div>
+<span class="node-detail" style="background-color: rgba(16, 185, 129, 0.1); color: #047857; font-weight: 700;">Prediction</span>
+<span class="node-detail">Normal / Pneumonia</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom: Details Cards -->
+<div class="details-row">
+<!-- Card 1: Model Details -->
+<div class="detail-card card-model">
+<div class="card-header">
+<div class="card-icon"><i class="fas fa-network-wired"></i></div>
+<h3 class="card-title">Model Specifications</h3>
+</div>
+<ul class="feature-list">
+<li class="feature-item">
+<i class="fas fa-cube"></i>
+<p><strong>Base Model:</strong> ResNet18 (Pre-trained on ImageNet)</p>
+</li>
+<li class="feature-item">
+<i class="fas fa-weight-hanging"></i>
+<p><strong>Total Params:</strong> 11.2 Million (Rich features)</p>
+</li>
+<li class="feature-item">
+<i class="fas fa-pen-fancy"></i>
+<p><strong>Trainable Params:</strong> Only 1,026 (Final layer)</p>
+</li>
+</ul>
+</div>
+<!-- Card 2: Training Config -->
+<div class="detail-card card-training">
+<div class="card-header">
+<div class="card-icon"><i class="fas fa-sliders-h"></i></div>
+<h3 class="card-title">Training Setup</h3>
+</div>
+<ul class="feature-list">
+<li class="feature-item">
+<i class="fas fa-stopwatch"></i>
+<p><strong>Efficiency:</strong> 10 epochs | 25 minutes (CPU)</p>
+</li>
+<li class="feature-item">
+<i class="fas fa-tachometer-alt"></i>
+<p><strong>Learning Rate:</strong> 1e-3 (Optimized for FC layer)</p>
+</li>
+<li class="feature-item">
+<i class="fas fa-save"></i>
+<p><strong>Checkpointing:</strong> Save model with best Val Loss</p>
+</li>
+</ul>
+</div>
+<!-- Card 3: Strategy -->
+<div class="detail-card card-strategy">
+<div class="card-header">
+<div class="card-icon"><i class="fas fa-clipboard-check"></i></div>
+<h3 class="card-title">Strategy</h3>
+</div>
+<ul class="feature-list">
+<li class="feature-item">
+<i class="fas fa-snowflake"></i>
+<p><strong>Feature Reuse:</strong> Leverage edge/texture detectors</p>
+</li>
+<li class="feature-item">
+<i class="fas fa-balance-scale"></i>
+<p><strong>Class Weights:</strong> Maintained for imbalance</p>
+</li>
+<li class="feature-item">
+<i class="fas fa-shield-alt"></i>
+<p><strong>Prevention:</strong> Frozen backbone prevents overfitting</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

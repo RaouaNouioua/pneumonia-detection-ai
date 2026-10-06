@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Conclusion</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&amp;family=Open+Sans:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            background-color: #ffffff;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        /* Header Style */
+        .header {
+            height: 120px;
+            padding: 0 60px;
+            display: flex;
+            align-items: center;
+            background-color: #ffffff;
+            border-bottom: 4px solid #f1f5f9;
+            flex-shrink: 0;
+            z-index: 10;
+        }
+        .header-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 42px;
+            color: #1e293b;
+            position: relative;
+            padding-left: 24px;
+        }
+        .header-title::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 48px;
+            background-color: #0ea5e9;
+            border-radius: 4px;
+        }
+
+        /* Main Content */
+        .content-area {
+            flex: 1;
+            display: flex;
+            padding: 40px 60px;
+            gap: 60px;
+            background-color: #f8fafc;
+        }
+
+        /* Left Column: Achievements */
+        .left-col {
+            flex: 1.2;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .section-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 24px;
+            color: #1e293b;
+            margin-bottom: 25px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+
+        .achievement-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .achievement-item {
+            background-color: white;
+            padding: 18px 24px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            transition: transform 0.2s;
+        }
+        
+        .check-icon {
+            width: 32px;
+            height: 32px;
+            background-color: #dcfce7;
+            color: #15803d;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            flex-shrink: 0;
+            font-size: 16px;
+        }
+        
+        .achievement-text {
+            font-size: 18px;
+            color: #334155;
+            font-weight: 600;
+            margin: 0;
+        }
+        .achievement-sub {
+            font-size: 14px;
+            color: #64748b;
+            margin: 4px 0 0 0;
+        }
+
+        /* Right Column: Quote & Thanks */
+        .right-col {
+            flex: 0.8;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .quote-box {
+            background-color: #1e293b; /* Solid color, slate-800 */
+            padding: 40px;
+            border-radius: 20px;
+            position: relative;
+            color: white;
+            box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.2);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            flex: 0.8;
+        }
+        
+        .quote-icon {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 40px;
+            color: rgba(255,255,255,0.1);
+        }
+        
+        .quote-text {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 24px;
+            font-weight: 600;
+            line-height: 1.4;
+            font-style: italic;
+            margin: 0 0 20px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .quote-author {
+            font-size: 14px;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .thank-you-box {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background-color: white;
+            border-radius: 20px;
+            border: 2px dashed #cbd5e1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ty-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 48px;
+            color: #0ea5e9;
+            margin: 0 0 5px 0;
+        }
+        .ty-subtitle {
+            font-size: 24px;
+            color: #475569;
+            font-weight: 600;
+            margin: 0 0 25px 0;
+        }
+        
+        .github-pill {
+            display: inline-flex;
+            align-items: center;
+            background-color: #24292e;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 16px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-decoration: none;
+        }
+
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Header -->
+<div class="header">
+<h1 class="header-title">Conclusion</h1>
+</div>
+<!-- Main Content -->
+<div class="content-area">
+<!-- Left: Achievements -->
+<div class="left-col">
+<h3 class="section-title">
+<i class="fas fa-clipboard-check" style="margin-right: 12px; color: #0ea5e9;"></i> 
+            Project Achievements
+        </h3>
+<div class="achievement-list">
+<div class="achievement-item">
+<div class="check-icon"><i class="fas fa-check"></i></div>
+<div>
+<p class="achievement-text">Built working pneumonia detection system</p>
+<p class="achievement-sub">Complete pipeline from raw X-rays to binary classification</p>
+</div>
+</div>
+<div class="achievement-item">
+<div class="check-icon"><i class="fas fa-chart-line"></i></div>
+<div>
+<p class="achievement-text">Improved accuracy with Transfer Learning</p>
+<p class="achievement-sub">ResNet18 boosted accuracy by +7.1% over baseline</p>
+</div>
+</div>
+<div class="achievement-item">
+<div class="check-icon"><i class="fas fa-shield-alt"></i></div>
+<div>
+<p class="achievement-text">Enhanced Clinical Safety</p>
+<p class="achievement-sub">Halved false alarms (50% reduction) while maintaining high recall</p>
+</div>
+</div>
+<div class="achievement-item">
+<div class="check-icon"><i class="fas fa-eye"></i></div>
+<div>
+<p class="achievement-text">Added Model Explainability</p>
+<p class="achievement-sub">Implemented Grad-CAM visualization to build clinician trust</p>
+</div>
+</div>
+<div class="achievement-item">
+<div class="check-icon"><i class="fas fa-file-alt"></i></div>
+<div>
+<p class="achievement-text">Professional Documentation</p>
+<p class="achievement-sub">Ready for academic submission and code review</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Right: Quote & Thanks -->
+<div class="right-col">
+<div class="quote-box">
+<i class="fas fa-quote-left quote-icon"></i>
+<p class="quote-text">"AI won't replace radiologists, but radiologists using AI will replace those not using it."</p>
+<p class="quote-author">— Medical AI Philosophy</p>
+</div>
+<div class="thank-you-box">
+<p class="ty-title">Thank You!</p>
+<p class="ty-subtitle">Questions?</p>
+<a class="github-pill" href="#">
+<i class="fab fa-github" style="margin-right: 10px; font-size: 20px;"></i>
+                github.com/student/pneumonia-detection
+            </a>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

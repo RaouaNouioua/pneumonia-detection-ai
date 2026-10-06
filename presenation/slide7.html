@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Solution - Transfer Learning</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&amp;family=Open+Sans:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            background-color: #ffffff;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        /* Header Style */
+        .header {
+            height: 120px;
+            padding: 0 60px;
+            display: flex;
+            align-items: center;
+            background-color: #ffffff;
+            border-bottom: 4px solid #f1f5f9;
+            flex-shrink: 0;
+            z-index: 10;
+        }
+        .header-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 42px;
+            color: #1e293b;
+            position: relative;
+            padding-left: 24px;
+        }
+        .header-title::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 48px;
+            background-color: #0ea5e9;
+            border-radius: 4px;
+        }
+
+        /* Main Content */
+        .content-area {
+            flex: 1;
+            display: flex;
+            padding: 40px 60px;
+            gap: 50px;
+            background-color: #f8fafc;
+        }
+
+        /* Left Column: Concept & Analogy */
+        .left-col {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .concept-box {
+            background-color: #ffffff;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+        }
+
+        .box-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 20px;
+            color: #0f172a;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+        }
+        .box-title i {
+            color: #0ea5e9;
+            margin-right: 12px;
+        }
+
+        .comparison-chart {
+            display: flex;
+            align-items: flex-end;
+            height: 100px;
+            gap: 40px;
+            margin-top: 10px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f1f5f9;
+        }
+
+        .bar-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            height: 100%;
+        }
+
+        .bar {
+            width: 60px;
+            border-radius: 6px 6px 0 0;
+            transition: height 1s ease;
+        }
+        .bar-small {
+            height: 15%;
+            background-color: #cbd5e1;
+        }
+        .bar-large {
+            height: 100%;
+            background-color: #3b82f6;
+        }
+
+        .bar-label {
+            margin-top: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #64748b;
+            text-align: center;
+        }
+        .bar-value {
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
+        /* Analogy Section */
+        .analogy-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .analogy-card {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            border-left: 4px solid transparent;
+            box-shadow: 0 2px 4px -1px rgba(0,0,0,0.05);
+        }
+
+        .analogy-baseline {
+            border-left-color: #94a3b8;
+        }
+        .analogy-transfer {
+            border-left-color: #10b981;
+            background-color: #f0fdf4;
+        }
+
+        .analogy-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-right: 16px;
+            flex-shrink: 0;
+        }
+
+        .analogy-text h4 {
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+        .analogy-text p {
+            font-size: 14px;
+            color: #475569;
+            margin: 0;
+        }
+
+        /* Right Column: Implementation Flow */
+        .right-col {
+            flex: 1.2;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .flow-container {
+            background-color: #ffffff;
+            border-radius: 20px;
+            padding: 30px;
+            flex: 1;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .step-item {
+            display: flex;
+            gap: 20px;
+            position: relative;
+            padding-bottom: 30px;
+        }
+        .step-item:last-child {
+            padding-bottom: 0;
+        }
+
+        /* Connecting Line */
+        .step-item:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            left: 24px;
+            top: 50px;
+            bottom: -10px;
+            width: 2px;
+            background-color: #e2e8f0;
+        }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background-color: #eff6ff;
+            color: #3b82f6;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 20px;
+            border: 2px solid #bfdbfe;
+            flex-shrink: 0;
+            z-index: 2;
+        }
+
+        .step-content {
+            flex: 1;
+            padding-top: 5px;
+        }
+
+        .step-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 18px;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+
+        .step-desc {
+            font-size: 15px;
+            color: #64748b;
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .visual-tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-right: 8px;
+        }
+
+        .tag-frozen {
+            background-color: #f1f5f9;
+            color: #64748b;
+            border: 1px solid #cbd5e1;
+        }
+        
+        .tag-train {
+            background-color: #fff7ed;
+            color: #ea580c;
+            border: 1px solid #fed7aa;
+        }
+
+        .arrow-indicator {
+            position: absolute;
+            right: -25px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #cbd5e1;
+            font-size: 24px;
+        }
+
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Header -->
+<div class="header">
+<h1 class="header-title">The Solution - Transfer Learning</h1>
+</div>
+<!-- Main Content -->
+<div class="content-area">
+<!-- Left: Concept & Analogy -->
+<div class="left-col">
+<!-- Why Box -->
+<div class="concept-box">
+<h3 class="box-title"><i class="fas fa-lightbulb"></i> Why Transfer Learning?</h3>
+<p style="color: #475569; font-size: 16px; margin-bottom: 20px;">
+                    Instead of learning from scratch on a small dataset, we start with knowledge from a massive dataset.
+                </p>
+<div class="comparison-chart">
+<div class="bar-group">
+<div class="bar bar-small"></div>
+<div class="bar-label">Our Data</div>
+<div class="bar-value">5,856 Images</div>
+</div>
+<div style="font-size: 24px; color: #94a3b8; padding-bottom: 30px;">vs</div>
+<div class="bar-group">
+<div class="bar bar-large"></div>
+<div class="bar-label">ImageNet</div>
+<div class="bar-value">1,200,000 Images</div>
+</div>
+</div>
+</div>
+<!-- Analogy Box -->
+<div class="concept-box" style="flex: 1; background-color: #f8fafc; border: none; padding: 0; box-shadow: none;">
+<h3 class="box-title" style="margin-bottom: 16px;"><i class="fas fa-layer-group"></i> The Analogy</h3>
+<div class="analogy-container">
+<!-- Comparison 1 -->
+<div class="analogy-card analogy-baseline">
+<div class="analogy-icon" style="background-color: #f1f5f9; color: #64748b;">
+<i class="fas fa-book-reader"></i>
+</div>
+<div class="analogy-text">
+<h4 style="color: #64748b;">Baseline CNN (From Scratch)</h4>
+<p>Like a student learning car mechanics from zero using just a few manuals.</p>
+</div>
+</div>
+<div style="text-align: center; color: #cbd5e1; margin: -10px 0;"><i class="fas fa-arrow-down"></i></div>
+<!-- Comparison 2 -->
+<div class="analogy-card analogy-transfer">
+<div class="analogy-icon" style="background-color: #d1fae5; color: #059669;">
+<i class="fas fa-bicycle"></i>
+</div>
+<div class="analogy-text">
+<h4 style="color: #059669;">Transfer Learning</h4>
+<p>Like a bicycle expert applying their existing knowledge of wheels and gears to understand car parts.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right: Implementation Flow -->
+<div class="right-col">
+<h3 style="font-family: 'Montserrat', sans-serif; font-weight: 600; color: #1e293b; margin-bottom: 20px; display: flex; align-items: center;">
+<i class="fas fa-code-branch" style="margin-right: 12px; color: #3b82f6;"></i> Our Implementation Workflow
+            </h3>
+<div class="flow-container">
+<!-- Step 1 -->
+<div class="step-item">
+<div class="step-number">1</div>
+<div class="step-content">
+<h4 class="step-title">Start with ResNet18</h4>
+<p class="step-desc">Load the model pre-trained on ImageNet. It already knows how to detect edges, textures, and complex shapes.</p>
+<div class="visual-tag tag-frozen"><i class="fas fa-brain" style="margin-right: 6px;"></i> Pre-trained Weights</div>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="step-item">
+<div class="step-number">2</div>
+<div class="step-content">
+<h4 class="step-title">Freeze Layers</h4>
+<p class="step-desc">"Lock" all convolutional layers so their learned features aren't destroyed during training.</p>
+<div class="visual-tag tag-frozen"><i class="fas fa-lock" style="margin-right: 6px;"></i> Parameters Frozen</div>
+</div>
+</div>
+<!-- Step 3 -->
+<div class="step-item">
+<div class="step-number">3</div>
+<div class="step-content">
+<h4 class="step-title">Replace Classifier Head</h4>
+<p class="step-desc">Remove the final layer (1000 classes) and replace it with a new layer for our specific task.</p>
+<div class="visual-tag" style="background-color: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0;">
+<i class="fas fa-exchange-alt" style="margin-right: 6px;"></i> 1000 → 2 Classes
+                        </div>
+</div>
+</div>
+<!-- Step 4 -->
+<div class="step-item">
+<div class="step-number" style="background-color: #fff7ed; color: #ea580c; border-color: #fed7aa;">4</div>
+<div class="step-content">
+<h4 class="step-title" style="color: #c2410c;">Train Final Layer</h4>
+<p class="step-desc">Train <strong>only</strong> the new classifier (1,026 parameters) to adapt the knowledge to Pneumonia detection.</p>
+<div class="visual-tag tag-train"><i class="fas fa-fire" style="margin-right: 6px;"></i> Trainable</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

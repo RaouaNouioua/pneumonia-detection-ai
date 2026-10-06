@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ResNet18 Results - Quantitative</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&amp;family=Open+Sans:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            background-color: #ffffff;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        /* Header Style */
+        .header {
+            height: 120px;
+            padding: 0 60px;
+            display: flex;
+            align-items: center;
+            background-color: #ffffff;
+            border-bottom: 4px solid #f1f5f9;
+            flex-shrink: 0;
+            z-index: 10;
+        }
+        .header-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 42px;
+            color: #1e293b;
+            position: relative;
+            padding-left: 24px;
+        }
+        .header-title::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 48px;
+            background-color: #0ea5e9;
+            border-radius: 4px;
+        }
+
+        /* Main Content */
+        .content-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 30px 60px;
+            gap: 20px;
+            background-color: #f8fafc;
+        }
+
+        /* Top Section: Metrics Table */
+        .metrics-container {
+            flex: 1;
+            background-color: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            padding: 0;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+        }
+
+        .metrics-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .metrics-table th {
+            text-align: left;
+            padding: 18px 30px;
+            background-color: #f1f5f9;
+            color: #475569;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 16px;
+            text-transform: uppercase;
+        }
+
+        .metrics-table td {
+            padding: 18px 30px;
+            color: #334155;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 18px;
+            vertical-align: middle;
+        }
+        
+        .metrics-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .metric-name {
+            font-weight: 600;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+        }
+        .metric-icon {
+            width: 32px;
+            color: #94a3b8;
+            margin-right: 10px;
+            text-align: center;
+        }
+
+        .val-baseline {
+            color: #64748b;
+        }
+        .val-resnet {
+            font-weight: 700;
+            color: #0ea5e9;
+        }
+
+        .improvement-tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 700;
+        }
+        .imp-positive {
+            background-color: #dcfce7;
+            color: #15803d;
+        }
+        .imp-neutral {
+            background-color: #f1f5f9;
+            color: #64748b;
+        }
+        
+        /* Bottom Section: Confusion Matrices Comparison */
+        .matrices-container {
+            flex: 1.2;
+            display: flex;
+            gap: 30px;
+            align-items: stretch;
+        }
+
+        .matrix-box {
+            flex: 1;
+            background-color: #ffffff;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+        }
+
+        .matrix-header {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 18px;
+            margin-bottom: 15px;
+            text-align: center;
+            color: #64748b;
+        }
+
+        .matrix-grid {
+            display: grid;
+            grid-template-columns: auto 1fr 1fr;
+            grid-template-rows: auto 1fr 1fr;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .mx-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #94a3b8;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .mx-label.col-head { padding-bottom: 4px; }
+        .mx-label.row-head { padding-right: 8px; writing-mode: vertical-rl; transform: rotate(180deg); }
+
+        .mx-cell {
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            position: relative;
+        }
+        .mx-val { font-size: 24px; font-weight: 700; color: #1e293b; }
+        .mx-sub { font-size: 10px; text-transform: uppercase; margin-top: 4px; opacity: 0.7; }
+
+        /* Color Coding for Confusion Matrix */
+        .bg-tn { background-color: #dcfce7; color: #166534; } /* True Normal (Green) */
+        .bg-tp { background-color: #dbeafe; color: #1e40af; } /* True Pneumonia (Blue) */
+        .bg-fp { background-color: #fee2e2; color: #991b1b; } /* False Positive (Red) */
+        .bg-fn { background-color: #ffedd5; color: #9a3412; } /* False Negative (Orange) */
+
+        /* Improvement Arrow */
+        .improvement-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #cbd5e1;
+            font-size: 30px;
+            width: 40px;
+        }
+
+        .key-takeaway {
+            background-color: #f0f9ff;
+            border-left: 4px solid #0ea5e9;
+            padding: 15px 20px;
+            margin-top: 5px;
+            border-radius: 0 8px 8px 0;
+            display: flex;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Header -->
+<div class="header">
+<h1 class="header-title">ResNet18 Results - Quantitative</h1>
+</div>
+<!-- Main Content -->
+<div class="content-area">
+<!-- Top: Metrics Comparison Table -->
+<div class="metrics-container">
+<table class="metrics-table">
+<thead>
+<tr>
+<th>Metric</th>
+<th>Baseline CNN</th>
+<th>ResNet18 (Transfer)</th>
+<th>Improvement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<div class="metric-name">
+<i class="fas fa-bullseye metric-icon"></i> Test Accuracy
+                            </div>
+</td>
+<td class="val-baseline">79.0%</td>
+<td class="val-resnet">86.1%</td>
+<td><div class="improvement-tag imp-positive"><i class="fas fa-arrow-up" style="margin-right: 6px;"></i> +7.1%</div></td>
+</tr>
+<tr>
+<td>
+<div class="metric-name">
+<i class="fas fa-heartbeat metric-icon"></i> Normal Recall
+                            </div>
+</td>
+<td class="val-baseline">47%</td>
+<td class="val-resnet">67%</td>
+<td><div class="improvement-tag imp-positive" style="background-color: #ccfbf1; color: #0f766e;"><i class="fas fa-rocket" style="margin-right: 6px;"></i> +20% (Significant)</div></td>
+</tr>
+<tr>
+<td>
+<div class="metric-name">
+<i class="fas fa-exclamation-circle metric-icon"></i> False Positives
+                            </div>
+</td>
+<td class="val-baseline">154</td>
+<td class="val-resnet">77</td>
+<td><div class="improvement-tag imp-positive"><i class="fas fa-arrow-down" style="margin-right: 6px;"></i> 50% Reduction</div></td>
+</tr>
+<tr>
+<td>
+<div class="metric-name">
+<i class="fas fa-stopwatch metric-icon"></i> Training Time
+                            </div>
+</td>
+<td class="val-baseline">15 min</td>
+<td class="val-resnet">25 min</td>
+<td><div class="improvement-tag imp-neutral"><i class="fas fa-clock" style="margin-right: 6px;"></i> +10 min</div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Bottom: Confusion Matrices -->
+<div class="matrices-container">
+<!-- Baseline Matrix -->
+<div class="matrix-box" style="border-top: 4px solid #94a3b8;">
+<div class="matrix-header">Baseline CNN</div>
+<div class="matrix-grid">
+<!-- Labels -->
+<div class="mx-label"></div>
+<div class="mx-label col-head">Pred Normal</div>
+<div class="mx-label col-head">Pred Pneumonia</div>
+<!-- Row 1 -->
+<div class="mx-label row-head">Act Normal</div>
+<div class="mx-cell bg-tn">
+<span class="mx-val">80</span>
+<span class="mx-sub">True Neg</span>
+</div>
+<div class="mx-cell bg-fp">
+<span class="mx-val">154</span>
+<span class="mx-sub" style="color: #991b1b;">False Pos</span>
+</div>
+<!-- Row 2 -->
+<div class="mx-label row-head">Act Pneu</div>
+<div class="mx-cell bg-fn">
+<span class="mx-val">6</span>
+<span class="mx-sub">False Neg</span>
+</div>
+<div class="mx-cell bg-tp">
+<span class="mx-val">384</span>
+<span class="mx-sub">True Pos</span>
+</div>
+</div>
+</div>
+<!-- Arrow -->
+<div class="improvement-arrow">
+<i class="fas fa-chevron-right"></i>
+</div>
+<!-- ResNet Matrix -->
+<div class="matrix-box" style="border-top: 4px solid #10b981;">
+<div class="matrix-header" style="color: #10b981;">ResNet18 (Transformed)</div>
+<div class="matrix-grid">
+<!-- Labels -->
+<div class="mx-label"></div>
+<div class="mx-label col-head">Pred Normal</div>
+<div class="mx-label col-head">Pred Pneumonia</div>
+<!-- Row 1 -->
+<div class="mx-label row-head">Act Normal</div>
+<div class="mx-cell bg-tn" style="border: 2px solid #16a34a;">
+<span class="mx-val">157</span>
+<span class="mx-sub" style="color: #166534;">True Neg (↑)</span>
+</div>
+<div class="mx-cell bg-fp">
+<span class="mx-val">77</span>
+<span class="mx-sub" style="color: #991b1b;">False Pos (↓)</span>
+</div>
+<!-- Row 2 -->
+<div class="mx-label row-head">Act Pneu</div>
+<div class="mx-cell bg-fn">
+<span class="mx-val">10</span>
+<span class="mx-sub">False Neg</span>
+</div>
+<div class="mx-cell bg-tp">
+<span class="mx-val">380</span>
+<span class="mx-sub">True Pos</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Summary Footer -->
+<div class="key-takeaway">
+<i class="fas fa-info-circle" style="color: #0ea5e9; font-size: 24px; margin-right: 15px;"></i>
+<p style="margin: 0; color: #0f172a; font-size: 16px;">
+<strong>Conclusion:</strong> ResNet18 provides a much more balanced model. While maintaining excellent pneumonia detection, it significantly reduces false alarms (halving False Positives), making it far more practical for clinical triage.
+            </p>
+</div>
+</div>
+</div>
+</body>
+</html>

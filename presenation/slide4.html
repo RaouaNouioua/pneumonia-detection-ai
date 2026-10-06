@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Data Preparation &amp; Challenges</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&amp;family=Open+Sans:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            background-color: #ffffff;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        /* Header Style */
+        .header {
+            height: 120px;
+            padding: 0 60px;
+            display: flex;
+            align-items: center;
+            background-color: #ffffff;
+            border-bottom: 4px solid #f1f5f9;
+            flex-shrink: 0;
+            z-index: 10;
+        }
+        .header-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 42px;
+            color: #1e293b;
+            position: relative;
+            padding-left: 24px;
+        }
+        .header-title::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 48px;
+            background-color: #0ea5e9;
+            border-radius: 4px;
+        }
+
+        /* Content Layout */
+        .content-area {
+            flex: 1;
+            padding: 40px 60px;
+            display: flex;
+            gap: 40px;
+            align-items: stretch;
+            background-image: radial-gradient(#e2e8f0 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+
+        /* Panel Styling */
+        .panel {
+            flex: 1;
+            background-color: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+        }
+
+        .panel-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .panel-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 22px;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .panel-body {
+            padding: 24px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Issue Panel Specifics */
+        .panel-issue {
+            border-top: 6px solid #ef4444;
+        }
+        .panel-issue .icon-box {
+            background-color: #fee2e2;
+            color: #ef4444;
+        }
+
+        /* Solution Panel Specifics */
+        .panel-solution {
+            border-top: 6px solid #10b981;
+        }
+        .panel-solution .icon-box {
+            background-color: #d1fae5;
+            color: #10b981;
+        }
+
+        .icon-box {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        /* Data Tables */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-size: 16px;
+        }
+        
+        .data-table th {
+            text-align: left;
+            padding: 12px 16px;
+            color: #64748b;
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+            border-bottom: 2px solid #f1f5f9;
+        }
+        
+        .data-table td {
+            padding: 16px;
+            color: #334155;
+            border-bottom: 1px solid #f1f5f9;
+            font-family: 'Open Sans', sans-serif;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Highlighting */
+        .highlight-row-error {
+            background-color: #fef2f2;
+        }
+        .highlight-row-error td {
+            color: #b91c1c;
+            font-weight: 700;
+            border-bottom: 1px solid #fee2e2;
+        }
+        
+        .highlight-row-success {
+            background-color: #f0fdf4;
+        }
+        .highlight-row-success td {
+            color: #15803d;
+            font-weight: 700;
+            border-bottom: 1px solid #dcfce7;
+        }
+
+        /* Alert Box */
+        .alert-box {
+            margin-top: auto;
+            padding: 16px;
+            border-radius: 8px;
+            font-size: 15px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            line-height: 1.5;
+        }
+        .alert-error {
+            background-color: #fef2f2;
+            border: 1px solid #fca5a5;
+            color: #991b1b;
+        }
+        .alert-success {
+            background-color: #f0fdf4;
+            border: 1px solid #86efac;
+            color: #166534;
+        }
+
+        /* Arrow Connector */
+        .connector {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #cbd5e1;
+            font-size: 32px;
+            width: 40px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .badge-pneumonia { background-color: #fee2e2; color: #b91c1c; }
+        .badge-normal { background-color: #dcfce7; color: #15803d; }
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Header -->
+<div class="header">
+<h1 class="header-title">Data Preparation &amp; Challenges</h1>
+</div>
+<!-- Main Content -->
+<div class="content-area">
+<!-- Left Panel: The Problem -->
+<div class="panel panel-issue">
+<div class="panel-header">
+<div class="panel-title">
+<div class="icon-box"><i class="fas fa-exclamation-triangle"></i></div>
+                        Original Distribution
+                    </div>
+<span class="badge" style="background-color: #f1f5f9; color: #64748b;">Issue Identified</span>
+</div>
+<div class="panel-body">
+<p style="margin-bottom: 20px; color: #475569;">The original dataset split provided by Kaggle had a critically small validation set.</p>
+<table class="data-table">
+<thead>
+<tr>
+<th>Subset</th>
+<th>Normal</th>
+<th>Pneumonia</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="font-semibold">Training</td>
+<td>1,341</td>
+<td>3,875</td>
+</tr>
+<tr class="highlight-row-error">
+<td>Validation</td>
+<td><i class="fas fa-arrow-right" style="font-size: 12px; margin-right: 6px;"></i>8</td>
+<td>8</td>
+</tr>
+<tr>
+<td class="font-semibold">Testing</td>
+<td>234</td>
+<td>390</td>
+</tr>
+</tbody>
+</table>
+<div class="alert-box alert-error">
+<i class="fas fa-ban" style="margin-top: 3px;"></i>
+<div>
+<p style="font-weight: 700; margin-bottom: 4px;">Critical Issue</p>
+<p>Only 16 images for validation is insufficient to reliably monitor overfitting or tune hyperparameters.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Connector Arrow -->
+<div class="connector">
+<i class="fas fa-chevron-right"></i>
+</div>
+<!-- Right Panel: The Fix -->
+<div class="panel panel-solution">
+<div class="panel-header">
+<div class="panel-title">
+<div class="icon-box"><i class="fas fa-check-double"></i></div>
+                        Our Solution: Stratified Split
+                    </div>
+<span class="badge" style="background-color: #dcfce7; color: #166534;">Fixed</span>
+</div>
+<div class="panel-body">
+<p style="margin-bottom: 20px; color: #475569;">We merged train/val sets and created a new <span class="font-bold text-gray-800">20% stratified split</span> to preserve class ratios.</p>
+<table class="data-table">
+<thead>
+<tr>
+<th>Subset</th>
+<th>Normal</th>
+<th>Pneumonia</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="font-semibold">Training</td>
+<td>1,073</td>
+<td>3,101</td>
+</tr>
+<tr class="highlight-row-success">
+<td>Validation</td>
+<td><i class="fas fa-check" style="font-size: 12px; margin-right: 6px;"></i>276</td>
+<td>782</td>
+</tr>
+<tr>
+<td class="font-semibold">Testing</td>
+<td>234</td>
+<td>390</td>
+</tr>
+</tbody>
+</table>
+<div class="alert-box alert-success">
+<i class="fas fa-chart-pie" style="margin-top: 3px;"></i>
+<div>
+<p style="font-weight: 700; margin-bottom: 4px;">Strategic Improvement</p>
+<p>Validation set size increased to 1,058 images (20%), ensuring statistically significant evaluation during training.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

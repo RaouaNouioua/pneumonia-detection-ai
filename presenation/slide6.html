@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Baseline CNN Results</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&amp;family=Open+Sans:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+    body {
+        font-family: 'Open Sans', sans-serif;
+        background-color: #f0f4f8;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+    }
+    .slide-container {
+        width: 1280px;
+        height: 720px;
+        background-color: #ffffff;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+    /* Header Style */
+    .header {
+        height: 120px;
+        padding: 0 60px;
+        display: flex;
+        align-items: center;
+        background-color: #ffffff;
+        border-bottom: 4px solid #f1f5f9;
+        flex-shrink: 0;
+        z-index: 10;
+    }
+    .header-title {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        font-size: 42px;
+        color: #1e293b;
+        position: relative;
+        padding-left: 24px;
+    }
+    .header-title::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 8px;
+        height: 48px;
+        background-color: #0ea5e9;
+        border-radius: 4px;
+    }
+
+    /* Content Layout */
+    .content-area {
+        flex: 1;
+        padding: 40px 60px;
+        display: flex;
+        gap: 40px;
+        align-items: stretch;
+        background-image: radial-gradient(#e2e8f0 1px, transparent 1px);
+        background-size: 30px 30px;
+    }
+
+    /* Panel Styling */
+    .panel {
+        flex: 1;
+        background-color: #ffffff;
+        border-radius: 16px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        border: 1px solid #e2e8f0;
+    }
+
+    .panel-header {
+        padding: 20px 24px;
+        border-bottom: 1px solid #e2e8f0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .panel-title {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 600;
+        font-size: 22px;
+        color: #1e293b;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .panel-body {
+        padding: 24px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Specific Panel Styles - Adapting for Results */
+    .panel-metrics {
+        border-top: 6px solid #3b82f6; /* Blue for metrics */
+    }
+    .panel-metrics .icon-box {
+        background-color: #eff6ff;
+        color: #3b82f6;
+    }
+
+    .panel-matrix {
+        border-top: 6px solid #8b5cf6; /* Purple for Matrix */
+    }
+    .panel-matrix .icon-box {
+        background-color: #f3e8ff;
+        color: #8b5cf6;
+    }
+
+    .icon-box {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+    }
+
+    /* Data Tables */
+    .data-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+        font-size: 16px;
+    }
+    
+    .data-table th {
+        text-align: left;
+        padding: 12px 16px;
+        color: #64748b;
+        font-weight: 600;
+        font-size: 14px;
+        text-transform: uppercase;
+        border-bottom: 2px solid #f1f5f9;
+    }
+    
+    .data-table td {
+        padding: 16px;
+        color: #334155;
+        border-bottom: 1px solid #f1f5f9;
+        font-family: 'Open Sans', sans-serif;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .data-table tr:last-child td {
+        border-bottom: none;
+    }
+
+    /* Matrix Table Specifics */
+    .matrix-table th, .matrix-table td {
+        text-align: center;
+        border: 1px solid #e2e8f0;
+    }
+    .matrix-table th {
+        background-color: #f8fafc;
+    }
+    .matrix-label {
+        writing-mode: vertical-rl;
+        transform: rotate(180deg);
+        text-align: center;
+        padding: 0;
+        width: 40px;
+    }
+
+    /* Highlighting */
+    .highlight-good {
+        color: #15803d;
+        font-weight: 700;
+    }
+    .highlight-bad {
+        color: #b91c1c;
+        font-weight: 700;
+    }
+    .highlight-neutral {
+        color: #475569;
+    }
+    
+    .bg-red-soft { background-color: #fef2f2; }
+    .bg-green-soft { background-color: #f0fdf4; }
+
+    /* Alert Box */
+    .alert-box {
+        margin-top: auto;
+        padding: 16px;
+        border-radius: 8px;
+        font-size: 15px;
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        line-height: 1.5;
+    }
+    .alert-warning {
+        background-color: #fff7ed;
+        border: 1px solid #fed7aa;
+        color: #9a3412;
+    }
+    .alert-info {
+        background-color: #f0f9ff;
+        border: 1px solid #bae6fd;
+        color: #0369a1;
+    }
+
+    .badge {
+        display: inline-block;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+</style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Header -->
+<div class="header">
+<h1 class="header-title">Baseline CNN Results</h1>
+</div>
+<!-- Main Content -->
+<div class="content-area">
+<!-- Left Panel: Performance Metrics -->
+<div class="panel panel-metrics">
+<div class="panel-header">
+<div class="panel-title">
+<div class="icon-box"><i class="fas fa-chart-bar"></i></div>
+                    Performance Metrics
+                </div>
+<span class="badge" style="background-color: #eff6ff; color: #1d4ed8;">Test Set</span>
+</div>
+<div class="panel-body">
+<table class="data-table">
+<thead>
+<tr>
+<th>Metric</th>
+<th>Value</th>
+<th>Assessment</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Validation Accuracy</td>
+<td>97.6%</td>
+<td class="highlight-good"><i class="fas fa-check-circle"></i> High</td>
+</tr>
+<tr>
+<td>Test Accuracy</td>
+<td>79.0%</td>
+<td class="highlight-bad"><i class="fas fa-exclamation-circle"></i> Drop</td>
+</tr>
+<tr>
+<td>Pneumonia Recall</td>
+<td>98.5%</td>
+<td class="highlight-good"><i class="fas fa-check-circle"></i> Excellent</td>
+</tr>
+<tr>
+<td>Normal Recall</td>
+<td>47.0%</td>
+<td class="highlight-bad"><i class="fas fa-times-circle"></i> Poor</td>
+</tr>
+</tbody>
+</table>
+<div class="alert-box alert-warning">
+<i class="fas fa-exclamation-triangle" style="margin-top: 3px;"></i>
+<div>
+<p style="font-weight: 700; margin-bottom: 4px;">Overfitting Detected</p>
+<p>Large gap between validation (97.6%) and test accuracy (79.0%) indicates the model does not generalize well to new data.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Panel: Confusion Matrix -->
+<div class="panel panel-matrix">
+<div class="panel-header">
+<div class="panel-title">
+<div class="icon-box"><i class="fas fa-th"></i></div>
+                    Confusion Matrix (n=624)
+                </div>
+<span class="badge" style="background-color: #f3e8ff; color: #7e22ce;">Analysis</span>
+</div>
+<div class="panel-body">
+<div style="display: flex; justify-content: center; margin-bottom: 20px;">
+<table class="data-table matrix-table" style="width: 100%;">
+<thead>
+<tr>
+<th style="border: none; background: none;"></th>
+<th>Pred Normal</th>
+<th>Pred Pneumonia</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="font-bold text-gray-600">Actual Normal</td>
+<td class="bg-blue-50">
+<div class="text-xl font-bold text-gray-800">80</div>
+<div class="text-xs text-gray-500">True Negative</div>
+</td>
+<td class="bg-red-50 highlight-bad">
+<div class="text-xl font-bold">154</div>
+<div class="text-xs text-red-600">False Positive</div>
+</td>
+</tr>
+<tr>
+<td class="font-bold text-gray-600">Actual Pneumonia</td>
+<td class="bg-green-50 highlight-good">
+<div class="text-xl font-bold">6</div>
+<div class="text-xs text-green-600">False Negative</div>
+</td>
+<td class="bg-blue-50">
+<div class="text-xl font-bold text-gray-800">384</div>
+<div class="text-xs text-gray-500">True Positive</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="alert-box alert-info">
+<i class="fas fa-user-md" style="margin-top: 3px;"></i>
+<div>
+<p style="font-weight: 700; margin-bottom: 4px;">Clinical Interpretation</p>
+<p>The model is "trigger happy". It catches almost all pneumonia cases (good safety) but flags too many healthy patients as sick (154 false alarms).</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

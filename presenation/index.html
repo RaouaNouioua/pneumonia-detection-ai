@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pneumonia Detection AI - Complete Presentation</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+        }
+
+        .presentation-frame {
+            width: 1280px;
+            height: 720px;
+            background-color: white;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Navigation Controls */
+        .nav-controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            background-color: rgba(15, 23, 42, 0.95);
+            padding: 15px 25px;
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-btn {
+            background-color: #0ea5e9;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-btn:hover {
+            background-color: #0284c7;
+            transform: scale(1.05);
+        }
+
+        .nav-btn:disabled {
+            background-color: #475569;
+            cursor: not-allowed;
+            transform: scale(1);
+        }
+
+        .slide-counter {
+            color: white;
+            font-weight: 600;
+            padding: 10px 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            font-size: 14px;
+        }
+
+        .home-btn {
+            background-color: #8b5cf6;
+        }
+
+        .home-btn:hover {
+            background-color: #7c3aed;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(15, 23, 42, 0.9);
+            padding: 12px 30px;
+            border-radius: 30px;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .project-title {
+            color: white;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 18px;
+            text-align: center;
+            margin: 0;
+        }
+
+        /* Slide Menu Toggle */
+        .menu-toggle {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            background-color: rgba(15, 23, 42, 0.9);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            z-index: 1001;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle:hover {
+            background-color: #1e293b;
+        }
+
+        .slide-menu {
+            position: absolute;
+            top: 70px;
+            right: 30px;
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            z-index: 1001;
+            max-height: 500px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .slide-menu.active {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .menu-item {
+            padding: 12px 15px;
+            margin: 5px 0;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            font-size: 14px;
+            color: #334155;
+            border-left: 3px solid transparent;
+        }
+
+        .menu-item:hover {
+            background-color: #f1f5f9;
+            border-left-color: #0ea5e9;
+        }
+
+        .menu-item.active {
+            background-color: #e0f2fe;
+            border-left-color: #0ea5e9;
+            font-weight: 600;
+        }
+
+        .menu-section {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 12px;
+            color: #94a3b8;
+            text-transform: uppercase;
+            margin-top: 15px;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .menu-section:first-child {
+            margin-top: 0;
+        }
+
+        /* Keyboard hint */
+        .keyboard-hint {
+            position: absolute;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(15, 23, 42, 0.7);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 15px;
+            font-size: 12px;
+            opacity: 0.7;
+        }
+</style>
+</head>
+<body>
+
+<!-- Presentation Frame -->
+<div class="presentation-frame">
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <h1 class="project-title">
+            <i class="fas fa-lungs"></i> PNEUMONIA DETECTION FROM CHEST X-RAYS - Deep Learning Project
+        </h1>
+    </div>
+
+    <!-- Menu Toggle -->
+    <button class="menu-toggle" onclick="toggleMenu()">
+        <i class="fas fa-bars"></i> Slide Index
+    </button>
+
+    <!-- Slide Menu -->
+    <div class="slide-menu" id="slideMenu">
+        <div class="menu-section">Introduction</div>
+        <div class="menu-item" data-slide="0">1. Title Slide</div>
+        <div class="menu-item" data-slide="1">2. The Problem - Why This Matters</div>
+        <div class="menu-item" data-slide="2">3. Project Overview</div>
+        
+        <div class="menu-section">Data & Methodology</div>
+        <div class="menu-item" data-slide="3">4. Data Preparation & Challenges</div>
+        <div class="menu-item" data-slide="4">5. Model 1 - Baseline CNN</div>
+        <div class="menu-item" data-slide="5">6. Baseline CNN Results</div>
+        
+        <div class="menu-section">Advanced Models</div>
+        <div class="menu-item" data-slide="6">7. The Solution - Transfer Learning</div>
+        <div class="menu-item" data-slide="7">8. ResNet18 Architecture & Training</div>
+        <div class="menu-item" data-slide="8">9. ResNet18 Results - Quantitative</div>
+        <div class="menu-item" data-slide="9">9a. Model Comparison - Visual Charts ⭐</div>
+        <div class="menu-item" data-slide="10">9b. Confusion Matrix Comparison ⭐</div>
+        <div class="menu-item" data-slide="11">10. ResNet18 Results - Qualitative</div>
+        
+        <div class="menu-section">Explainability</div>
+        <div class="menu-item" data-slide="12">11. Model Explainability - Grad-CAM</div>
+        <div class="menu-item" data-slide="13">11a. Grad-CAM Results - Real Examples ⭐</div>
+        
+        <div class="menu-section">Analysis & Conclusion</div>
+        <div class="menu-item" data-slide="14">12. Technical Challenges & Solutions</div>
+        <div class="menu-item" data-slide="15">13. Clinical Relevance & Impact</div>
+        <div class="menu-item" data-slide="16">14. Key Learnings & Insights</div>
+        <div class="menu-item" data-slide="17">15. Future Work</div>
+        <div class="menu-item" data-slide="18">16. Conclusion</div>
+    </div>
+
+    <!-- Main Slide Display -->
+    <iframe id="slideFrame" src="slide1.html"></iframe>
+
+    <!-- Navigation Controls -->
+    <div class="nav-controls">
+        <button class="nav-btn home-btn" onclick="goToSlide(0)">
+            <i class="fas fa-home"></i> Home
+        </button>
+        <button class="nav-btn" id="prevBtn" onclick="previousSlide()">
+            <i class="fas fa-chevron-left"></i> Previous
+        </button>
+        <div class="slide-counter">
+            <span id="currentSlide">1</span> / <span id="totalSlides">19</span>
+        </div>
+        <button class="nav-btn" id="nextBtn" onclick="nextSlide()">
+            Next <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
+
+    <!-- Keyboard Hint -->
+    <div class="keyboard-hint">
+        <i class="fas fa-keyboard"></i> Use ← → arrow keys to navigate
+    </div>
+</div>
+
+<script>
+    // Slide configuration
+    const slides = [
+        'slide1.html',
+        'slide2.html',
+        'slide3.html',
+        'slide4.html',
+        'slide5.html',
+        'slide6.html',
+        'slide7.html',
+        'slide8.html',
+        'slide9.html',
+        'slide19.html', 
+        'slide18.html',  
+        'slide10.html',
+        'slide11.html',
+        'slide17.html',
+        'slide12.html',
+        'slide13.html',
+        'slide14.html',
+        'slide15.html',
+        'slide16.html'
+    ];
+
+    let currentSlideIndex = 0;
+
+    // Initialize
+    function init() {
+        document.getElementById('totalSlides').textContent = slides.length;
+        updateSlide();
+        updateMenuHighlight();
+    }
+
+    // Update slide display
+    function updateSlide() {
+        const iframe = document.getElementById('slideFrame');
+        iframe.src = slides[currentSlideIndex];
+        document.getElementById('currentSlide').textContent = currentSlideIndex + 1;
+        
+        // Update button states
+        document.getElementById('prevBtn').disabled = currentSlideIndex === 0;
+        document.getElementById('nextBtn').disabled = currentSlideIndex === slides.length - 1;
+        
+        updateMenuHighlight();
+    }
+
+    // Navigation functions
+    function nextSlide() {
+        if (currentSlideIndex < slides.length - 1) {
+            currentSlideIndex++;
+            updateSlide();
+        }
+    }
+
+    function previousSlide() {
+        if (currentSlideIndex > 0) {
+            currentSlideIndex--;
+            updateSlide();
+        }
+    }
+
+    function goToSlide(index) {
+        if (index >= 0 && index < slides.length) {
+            currentSlideIndex = index;
+            updateSlide();
+        }
+    }
+
+    // Menu functions
+    function toggleMenu() {
+        document.getElementById('slideMenu').classList.toggle('active');
+    }
+
+    function updateMenuHighlight() {
+        const menuItems = document.querySelectorAll('.menu-item');
+        menuItems.forEach((item, index) => {
+            if (index === currentSlideIndex) {
+                item.classList.add('active');
+            } else {
+                item.classList.remove('active');
+            }
+        });
+    }
+
+    // Menu item click handlers
+    document.addEventListener('DOMContentLoaded', function() {
+        const menuItems = document.querySelectorAll('.menu-item');
+        menuItems.forEach((item, index) => {
+            item.addEventListener('click', function() {
+                goToSlide(parseInt(this.getAttribute('data-slide')));
+                toggleMenu();
+            });
+        });
+    });
+
+    // Keyboard navigation
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight') {
+            nextSlide();
+        } else if (e.key === 'ArrowLeft') {
+            previousSlide();
+        } else if (e.key === 'Home') {
+            goToSlide(0);
+        } else if (e.key === 'End') {
+            goToSlide(slides.length - 1);
+        } else if (e.key === 'Escape') {
+            // Close menu if open
+            document.getElementById('slideMenu').classList.remove('active');
+        }
+    });
+
+    // Initialize on load
+    window.onload = init;
+</script>
+
+</body>
+</html>

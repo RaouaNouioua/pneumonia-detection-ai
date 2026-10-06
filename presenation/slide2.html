@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Problem - Why This Matters</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&amp;family=Open+Sans:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            background-color: #ffffff;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .header {
+            height: 120px;
+            padding: 0 60px;
+            display: flex;
+            align-items: center;
+            background-color: #ffffff;
+            border-bottom: 4px solid #f1f5f9;
+        }
+        .header-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 42px;
+            color: #1e293b;
+            position: relative;
+            padding-left: 24px;
+        }
+        .header-title::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 48px;
+            background-color: #0ea5e9; /* Sky Blue/Teal */
+            border-radius: 4px;
+        }
+        .content-area {
+            flex: 1;
+            display: flex;
+            padding: 40px 60px;
+            gap: 60px;
+        }
+        .left-column {
+            flex: 1.2;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .right-column {
+            flex: 0.8;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .section-box {
+            margin-bottom: 32px;
+        }
+        .section-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 24px;
+            color: #0f766e; /* Dark Teal */
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+        }
+        .section-title i {
+            margin-right: 12px;
+            font-size: 20px;
+        }
+        .bullet-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .bullet-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 12px;
+            font-size: 18px;
+            color: #475569;
+            line-height: 1.6;
+        }
+        .bullet-marker {
+            color: #0ea5e9;
+            margin-right: 12px;
+            margin-top: 6px;
+            font-size: 14px;
+        }
+        /* Callout Statistics Box */
+        .stat-card {
+            background-color: #f8fafc;
+            border-radius: 16px;
+            padding: 40px;
+            width: 100%;
+            border: 2px solid #e2e8f0;
+            text-align: center;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background-color: #ef4444; /* Alert Red */
+        }
+        .stat-number {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 84px;
+            color: #ef4444;
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+        .stat-label {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 22px;
+            color: #1e293b;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+        .stat-sublabel {
+            font-size: 16px;
+            color: #64748b;
+            font-style: italic;
+        }
+        .solution-box {
+            background-color: #eff6ff;
+            border-left: 6px solid #3b82f6;
+            padding: 24px;
+            border-radius: 0 8px 8px 0;
+            width: 100%;
+        }
+        .solution-title {
+            color: #1d4ed8;
+            font-weight: 700;
+            font-size: 20px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+        .bg-icon {
+            position: absolute;
+            right: -20px;
+            bottom: -20px;
+            font-size: 120px;
+            color: rgba(14, 165, 233, 0.05);
+            z-index: 0;
+        }
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Header -->
+<div class="header">
+<h1 class="header-title">The Problem - Why This Matters</h1>
+</div>
+<!-- Main Content -->
+<div class="content-area">
+<!-- Left Column: Text Content -->
+<div class="left-column">
+<!-- Section 1 -->
+<div class="section-box">
+<h3 class="section-title">
+<i class="fas fa-globe-americas"></i>
+                        Global Health Crisis
+                    </h3>
+<ul class="bullet-list">
+<li class="bullet-item">
+<i class="fas fa-circle bullet-marker"></i>
+<p>Pneumonia is the leading infectious cause of death in children worldwide</p>
+</li>
+<li class="bullet-item">
+<i class="fas fa-circle bullet-marker"></i>
+<p>Limited healthcare resources and shortage of radiologists in developing regions</p>
+</li>
+</ul>
+</div>
+<!-- Section 2 -->
+<div class="section-box">
+<h3 class="section-title">
+<i class="fas fa-exclamation-triangle"></i>
+                        Current Challenges
+                    </h3>
+<ul class="bullet-list">
+<li class="bullet-item">
+<i class="fas fa-circle bullet-marker"></i>
+<p>Manual diagnosis from X-rays is time-consuming and subjective</p>
+</li>
+<li class="bullet-item">
+<i class="fas fa-circle bullet-marker"></i>
+<p>Delayed diagnosis leads to significantly worse patient outcomes</p>
+</li>
+<li class="bullet-item">
+<i class="fas fa-circle bullet-marker"></i>
+<p>Human fatigue increases diagnostic errors in high-volume settings</p>
+</li>
+</ul>
+</div>
+<!-- Section 3: Solution -->
+<div class="solution-box">
+<h4 class="solution-title"><i class="fas fa-check-circle" style="margin-right: 10px;"></i> Our Solution</h4>
+<p style="color: #334155; font-size: 18px; margin: 0;">AI-assisted diagnosis system that provides fast, consistent, and accessible screening.</p>
+</div>
+</div>
+<!-- Right Column: Key Statistic -->
+<div class="right-column">
+<div class="stat-card">
+<p class="stat-number">2.5M</p>
+<p class="stat-label">Deaths Annually</p>
+<p class="stat-sublabel">(Source: WHO, 2023)</p>
+<i class="fas fa-heartbeat bg-icon" style="color: rgba(239, 68, 68, 0.05);"></i>
+</div>
+<div class="stat-card" style="border-color: #cbd5e1; padding: 30px; margin-bottom: 0;">
+<div style="display: flex; align-items: center; justify-content: center; margin-bottom: 15px;">
+<i class="fas fa-user-md" style="font-size: 48px; color: #64748b; margin-right: 20px;"></i>
+<i class="fas fa-arrow-right" style="font-size: 24px; color: #94a3b8; margin-right: 20px;"></i>
+<i class="fas fa-robot" style="font-size: 48px; color: #0ea5e9;"></i>
+</div>
+<p style="font-size: 18px; color: #475569; margin: 0;">Bridging the gap with AI support</p>
+</div>
+</div>
+</div>
+<!-- Background decorative element -->
+<i class="fas fa-notes-medical bg-icon" style="bottom: 40px; right: 40px; font-size: 200px;"></i>
+</div>
+</body>
+</html>

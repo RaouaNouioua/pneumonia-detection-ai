@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Future Work</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&amp;family=Open+Sans:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            background-color: #ffffff;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        /* Header Style */
+        .header {
+            height: 120px;
+            padding: 0 60px;
+            display: flex;
+            align-items: center;
+            background-color: #ffffff;
+            border-bottom: 4px solid #f1f5f9;
+            flex-shrink: 0;
+            z-index: 10;
+        }
+        .header-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 42px;
+            color: #1e293b;
+            position: relative;
+            padding-left: 24px;
+        }
+        .header-title::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 48px;
+            background-color: #0ea5e9;
+            border-radius: 4px;
+        }
+
+        /* Main Content */
+        .content-area {
+            flex: 1;
+            display: flex;
+            padding: 40px 60px;
+            gap: 50px;
+            background-color: #f8fafc;
+            position: relative;
+        }
+
+        /* Background Watermark Arrow */
+        .bg-arrow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 400px;
+            color: rgba(226, 232, 240, 0.4);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Phase Columns */
+        .phase-col {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            z-index: 1;
+            background-color: rgba(255, 255, 255, 0.6);
+            border-radius: 20px;
+            padding: 24px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            backdrop-filter: blur(5px);
+        }
+
+        .phase-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #f1f5f9;
+        }
+
+        .phase-icon-box {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 16px;
+            font-size: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .phase-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 22px;
+            color: #1e293b;
+            margin: 0;
+        }
+        
+        .phase-subtitle {
+            font-size: 14px;
+            color: #64748b;
+            margin-top: 4px;
+            font-weight: 500;
+        }
+
+        /* Phase 1 Styling (Blue/Teal) */
+        .phase-1 { border-top: 6px solid #0ea5e9; }
+        .phase-1 .phase-icon-box { background-color: #e0f2fe; color: #0284c7; }
+        .phase-1 .timeline-line { border-left: 2px dashed #bae6fd; }
+
+        /* Phase 2 Styling (Purple/Indigo) */
+        .phase-2 { border-top: 6px solid #8b5cf6; }
+        .phase-2 .phase-icon-box { background-color: #f3e8ff; color: #7c3aed; }
+        .phase-2 .timeline-line { border-left: 2px dashed #ddd6fe; }
+
+        /* Timeline Items */
+        .timeline-container {
+            flex: 1;
+            position: relative;
+            padding-left: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 29px;
+            top: 20px;
+            bottom: 20px;
+            width: 0;
+            z-index: 0;
+        }
+
+        .milestone-item {
+            position: relative;
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            z-index: 1;
+        }
+        .milestone-item:last-child { margin-bottom: 0; }
+
+        .milestone-marker {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: #ffffff;
+            border: 4px solid #cbd5e1;
+            margin-right: 24px;
+            flex-shrink: 0;
+            z-index: 2;
+        }
+        
+        .phase-1 .milestone-marker { border-color: #0ea5e9; }
+        .phase-2 .milestone-marker { border-color: #8b5cf6; }
+
+        .milestone-card {
+            flex: 1;
+            background-color: #ffffff;
+            padding: 16px 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            border: 1px solid #f1f5f9;
+            transition: transform 0.2s;
+        }
+        
+        .milestone-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background-color: #f8fafc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 16px;
+            color: #64748b;
+            font-size: 16px;
+        }
+
+        .milestone-content h4 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 16px;
+            color: #334155;
+            margin-bottom: 4px;
+        }
+        
+        .milestone-content p {
+            font-size: 13px;
+            color: #64748b;
+            margin: 0;
+            line-height: 1.3;
+        }
+
+        /* Specific Item Icons */
+        .icon-tune { color: #0369a1; background-color: #e0f2fe; }
+        .icon-data { color: #0369a1; background-color: #e0f2fe; }
+        .icon-web { color: #0369a1; background-color: #e0f2fe; }
+        
+        .icon-ai { color: #6d28d9; background-color: #f3e8ff; }
+        .icon-med { color: #6d28d9; background-color: #f3e8ff; }
+        .icon-global { color: #6d28d9; background-color: #f3e8ff; }
+
+        /* Bottom Tags */
+        .goal-tag {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: auto;
+            align-self: flex-start;
+        }
+        
+        .tag-phase1 { background-color: #f0f9ff; color: #0369a1; }
+        .tag-phase2 { background-color: #f5f3ff; color: #6d28d9; }
+
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Header -->
+<div class="header">
+<h1 class="header-title">Future Work &amp; Roadmap</h1>
+</div>
+<!-- Main Content -->
+<div class="content-area">
+<!-- Background Visual -->
+<div class="bg-arrow">
+<i class="fas fa-chevron-right"></i>
+</div>
+<!-- Phase 1: Immediate -->
+<div class="phase-col phase-1">
+<div class="phase-header">
+<div class="phase-icon-box">
+<i class="fas fa-clipboard-check"></i>
+</div>
+<div>
+<h2 class="phase-title">Immediate Next Steps</h2>
+<p class="phase-subtitle">Short-term optimization &amp; validation (0-6 months)</p>
+</div>
+</div>
+<div class="timeline-container">
+<div class="timeline-line"></div>
+<!-- Item 1 -->
+<div class="milestone-item">
+<div class="milestone-marker"></div>
+<div class="milestone-card">
+<div class="milestone-icon icon-tune"><i class="fas fa-sliders-h"></i></div>
+<div class="milestone-content">
+<h4>Model Fine-tuning</h4>
+<p>Unfreeze more ResNet layers and train with lower learning rate.</p>
+</div>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="milestone-item">
+<div class="milestone-marker"></div>
+<div class="milestone-card">
+<div class="milestone-icon icon-data"><i class="fas fa-hospital-alt"></i></div>
+<div class="milestone-content">
+<h4>External Validation</h4>
+<p>Test on datasets from different hospitals to ensure generalizability.</p>
+</div>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="milestone-item">
+<div class="milestone-marker"></div>
+<div class="milestone-card">
+<div class="milestone-icon icon-data"><i class="fas fa-vial"></i></div>
+<div class="milestone-content">
+<h4>Subtype Classification</h4>
+<p>Expand model to distinguish between Bacterial vs. Viral pneumonia.</p>
+</div>
+</div>
+</div>
+<!-- Item 4 -->
+<div class="milestone-item">
+<div class="milestone-marker"></div>
+<div class="milestone-card">
+<div class="milestone-icon icon-web"><i class="fas fa-laptop-code"></i></div>
+<div class="milestone-content">
+<h4>Web Deployment</h4>
+<p>Launch simple Streamlit/Flask interface for easy user testing.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="goal-tag tag-phase1">Goal: Production Readiness</div>
+</div>
+<!-- Phase 2: Long-Term -->
+<div class="phase-col phase-2">
+<div class="phase-header">
+<div class="phase-icon-box">
+<i class="fas fa-rocket"></i>
+</div>
+<div>
+<h2 class="phase-title">Long-Term Vision</h2>
+<p class="phase-subtitle">System expansion &amp; ecosystem (6-18 months)</p>
+</div>
+</div>
+<div class="timeline-container">
+<div class="timeline-line"></div>
+<!-- Item 1 -->
+<div class="milestone-item">
+<div class="milestone-marker"></div>
+<div class="milestone-card">
+<div class="milestone-icon icon-ai"><i class="fas fa-layer-group"></i></div>
+<div class="milestone-content">
+<h4>Multi-modal AI</h4>
+<p>Combine X-ray data with patient symptoms &amp; EMR history.</p>
+</div>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="milestone-item">
+<div class="milestone-marker"></div>
+<div class="milestone-card">
+<div class="milestone-icon icon-med"><i class="fas fa-tachometer-alt"></i></div>
+<div class="milestone-content">
+<h4>Severity Scoring</h4>
+<p>Predict infection severity, not just binary presence.</p>
+</div>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="milestone-item">
+<div class="milestone-marker"></div>
+<div class="milestone-card">
+<div class="milestone-icon icon-med"><i class="fas fa-pills"></i></div>
+<div class="milestone-content">
+<h4>Treatment Assist</h4>
+<p>Suggest antibiotic vs. supportive care based on type.</p>
+</div>
+</div>
+</div>
+<!-- Item 4 -->
+<div class="milestone-item">
+<div class="milestone-marker"></div>
+<div class="milestone-card">
+<div class="milestone-icon icon-global"><i class="fas fa-cloud-upload-alt"></i></div>
+<div class="milestone-content">
+<h4>Global API</h4>
+<p>Cloud deployment for low-resource regions worldwide.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="goal-tag tag-phase2">Goal: Clinical Transformation</div>
+</div>
+</div>
+</div>
+</body>
+</html>

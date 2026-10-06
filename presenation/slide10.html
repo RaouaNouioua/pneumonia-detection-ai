@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Qualitative Impact</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&amp;family=Open+Sans:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            background-color: #ffffff;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        /* Header Style Matching Slide 2 */
+        .header {
+            height: 120px;
+            padding: 0 60px;
+            display: flex;
+            align-items: center;
+            background-color: #ffffff;
+            border-bottom: 4px solid #f1f5f9;
+            flex-shrink: 0;
+        }
+        .header-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 42px;
+            color: #1e293b;
+            position: relative;
+            padding-left: 24px;
+        }
+        .header-title::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 48px;
+            background-color: #0ea5e9; /* Sky Blue/Teal */
+            border-radius: 4px;
+        }
+
+        /* Main Content Layout */
+        .content-area {
+            flex: 1;
+            padding: 40px 60px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        /* Scenario Banner (Adapted from Objective Banner) */
+        .scenario-banner {
+            background-color: #f8fafc;
+            border-left: 6px solid #64748b;
+            padding: 25px 30px;
+            border-radius: 0 12px 12px 0;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+        .scenario-icon {
+            background-color: #ffffff;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            color: #64748b;
+            margin-right: 30px;
+            box-shadow: 0 4px 6px -1px rgba(100, 116, 139, 0.2);
+            flex-shrink: 0;
+        }
+        .scenario-text h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 22px;
+            color: #334155;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .scenario-text p {
+            font-size: 18px;
+            color: #475569;
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        /* Bottom Columns */
+        .columns-container {
+            display: flex;
+            gap: 40px;
+            flex: 1;
+        }
+        .info-card {
+            flex: 1;
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 24px;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 16px;
+        }
+        .card-icon {
+            font-size: 28px;
+            margin-right: 16px;
+        }
+        .card-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 24px;
+            color: #1e293b;
+        }
+        
+        /* Baseline Card (Warning/Orange) */
+        .baseline-card { border-top: 6px solid #f59e0b; }
+        .baseline-card .card-icon { color: #f59e0b; }
+        
+        /* ResNet Card (Success/Green) */
+        .resnet-card { border-top: 6px solid #10b981; }
+        .resnet-card .card-icon { color: #10b981; }
+
+        /* List Styling */
+        .custom-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .list-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            font-size: 18px;
+            color: #475569;
+            line-height: 1.5;
+        }
+        .item-icon {
+            margin-right: 14px;
+            margin-top: 5px;
+            font-size: 18px;
+            opacity: 0.9;
+            flex-shrink: 0;
+        }
+        .baseline-card .item-icon { color: #f59e0b; }
+        .resnet-card .item-icon { color: #10b981; }
+
+        /* Background Watermarks */
+        .bg-watermark {
+            position: absolute;
+            bottom: -20px;
+            right: -20px;
+            font-size: 140px;
+            opacity: 0.03;
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        /* Stats Highlighting */
+        .stat-bad {
+            color: #b45309;
+            font-weight: 700;
+            background-color: #fffbeb;
+            padding: 0 6px;
+            border-radius: 4px;
+        }
+        .stat-good {
+            color: #047857;
+            font-weight: 700;
+            background-color: #ecfdf5;
+            padding: 0 6px;
+            border-radius: 4px;
+        }
+        .stat-neutral {
+            color: #1e293b;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Header -->
+<div class="header">
+<h1 class="header-title">ResNet18 Results — Qualitative Impact</h1>
+</div>
+<!-- Main Content -->
+<div class="content-area">
+<!-- Scenario Section (Top) -->
+<div class="scenario-banner">
+<div class="scenario-icon">
+<i class="fas fa-users-medical"></i>
+</div>
+<div class="scenario-text">
+<h3>Clinical Simulation</h3>
+<p>Projected impact analysis when screening a cohort of <span style="font-weight: 700; color: #1e293b;">1,000 patients</span> in a hospital triage setting.</p>
+</div>
+</div>
+<!-- Two Columns (Bottom) -->
+<div class="columns-container">
+<!-- Baseline Column -->
+<div class="info-card baseline-card">
+<i class="fas fa-history bg-watermark"></i>
+<div class="card-header">
+<i class="fas fa-clipboard-list card-icon"></i>
+<h2 class="card-title">Before (Baseline CNN)</h2>
+</div>
+<ul class="custom-list">
+<li class="list-item">
+<i class="fas fa-home item-icon"></i>
+<p>Only <span class="stat-neutral">~340</span> healthy patients correctly sent home.</p>
+</li>
+<li class="list-item">
+<i class="fas fa-exclamation-triangle item-icon"></i>
+<p><span class="stat-bad">~660 False Alarms</span><br/>
+<span style="font-size: 16px; opacity: 0.8;">Majority of healthy patients flagged as sick.</span></p>
+</li>
+<li class="list-item">
+<i class="fas fa-user-injured item-icon"></i>
+<p>Result: <span style="font-weight: 600;">High anxiety</span> &amp; unnecessary testing for healthy individuals.</p>
+</li>
+</ul>
+</div>
+<!-- ResNet Column -->
+<div class="info-card resnet-card">
+<i class="fas fa-check-circle bg-watermark"></i>
+<div class="card-header">
+<i class="fas fa-rocket card-icon"></i>
+<h2 class="card-title">After (ResNet18)</h2>
+</div>
+<ul class="custom-list">
+<li class="list-item">
+<i class="fas fa-home item-icon"></i>
+<p><span class="stat-good">~670</span> correctly sent home<br/>
+<span style="font-size: 16px; opacity: 0.8;">Doubled the efficiency of clearing healthy cases.</span></p>
+</li>
+<li class="list-item">
+<i class="fas fa-bell-slash item-icon"></i>
+<p><span class="stat-good">~330 False Alarms</span><br/>
+<span style="font-size: 16px; opacity: 0.8;">False positives reduced by 50%.</span></p>
+</li>
+<li class="list-item">
+<i class="fas fa-shield-virus item-icon"></i>
+<p>Safety Maintained: <span class="stat-neutral">974</span> pneumonia cases successfully detected.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

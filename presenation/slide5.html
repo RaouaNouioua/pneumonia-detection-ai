@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Model 1 - Baseline CNN</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&amp;family=Open+Sans:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            background-color: #ffffff;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        /* Header Style */
+        .header {
+            height: 120px;
+            padding: 0 60px;
+            display: flex;
+            align-items: center;
+            background-color: #ffffff;
+            border-bottom: 4px solid #f1f5f9;
+            flex-shrink: 0;
+            z-index: 10;
+        }
+        .header-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 42px;
+            color: #1e293b;
+            position: relative;
+            padding-left: 24px;
+        }
+        .header-title::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 48px;
+            background-color: #0ea5e9;
+            border-radius: 4px;
+        }
+
+        /* Main Content Layout */
+        .content-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 40px 60px;
+            background-color: #f8fafc;
+        }
+
+        /* Section 1: Architecture Diagram */
+        .diagram-container {
+            flex: 3;
+            background-color: #ffffff;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+            padding: 20px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .diagram-label {
+            position: absolute;
+            top: 16px;
+            left: 24px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            color: #64748b;
+            text-transform: uppercase;
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+
+        .pipeline-flow {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 40px;
+        }
+
+        /* Diagram Nodes */
+        .node {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 140px;
+            position: relative;
+            transition: transform 0.2s;
+        }
+        
+        .node-box {
+            width: 100%;
+            background-color: #ffffff;
+            border: 2px solid #cbd5e1;
+            border-radius: 12px;
+            padding: 15px 10px;
+            text-align: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            z-index: 2;
+        }
+
+        .node-title {
+            font-weight: 700;
+            color: #1e293b;
+            font-size: 16px;
+            margin-bottom: 8px;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .node-detail {
+            font-size: 12px;
+            color: #64748b;
+            background-color: #f1f5f9;
+            padding: 4px 8px;
+            border-radius: 4px;
+            margin-top: 4px;
+            display: block;
+        }
+
+        /* Specific Node Styling */
+        .node-input .node-box {
+            border-color: #94a3b8;
+            border-style: dashed;
+        }
+        
+        .node-conv .node-box {
+            border-top: 5px solid #0ea5e9;
+            border-color: #e2e8f0; /* sides and bottom */
+        }
+
+        .node-dense .node-box {
+            border-top: 5px solid #8b5cf6; /* purple */
+            border-color: #e2e8f0;
+        }
+
+        .node-output .node-box {
+            border-color: #10b981; /* green */
+            background-color: #f0fdf4;
+        }
+
+        .arrow-connector {
+            flex: 1;
+            height: 2px;
+            background-color: #cbd5e1;
+            position: relative;
+            margin: 0 10px;
+        }
+        .arrow-connector::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            border-left: 8px solid #cbd5e1;
+            border-top: 6px solid transparent;
+            border-bottom: 6px solid transparent;
+        }
+
+        /* Section 2: Info Cards */
+        .details-row {
+            flex: 2;
+            display: flex;
+            gap: 30px;
+        }
+
+        .detail-card {
+            flex: 1;
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 24px;
+            border-left: 5px solid #cbd5e1;
+            box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+            color: #334155;
+        }
+        
+        .card-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            font-size: 18px;
+        }
+
+        .card-title {
+            font-weight: 700;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 18px;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 10px;
+            font-size: 15px;
+            color: #475569;
+            line-height: 1.4;
+        }
+        
+        .feature-item i {
+            margin-right: 10px;
+            margin-top: 4px;
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
+        /* Specific Colors for Cards */
+        .card-specs { border-color: #3b82f6; }
+        .card-specs .card-icon { background-color: #eff6ff; color: #3b82f6; }
+        
+        .card-strategy { border-color: #f59e0b; }
+        .card-strategy .card-icon { background-color: #fffbeb; color: #f59e0b; }
+        
+        .card-training { border-color: #10b981; }
+        .card-training .card-icon { background-color: #ecfdf5; color: #10b981; }
+
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Header -->
+<div class="header">
+<h1 class="header-title">Model 1 - Baseline CNN (From Scratch)</h1>
+</div>
+<!-- Main Content -->
+<div class="content-area">
+<!-- Top: Architecture Diagram -->
+<div class="diagram-container">
+<div class="diagram-label">3-Layer CNN Architecture</div>
+<div class="pipeline-flow">
+<!-- Input -->
+<div class="node node-input">
+<div class="node-box">
+<i class="fas fa-image" style="font-size: 24px; color: #64748b; margin-bottom: 8px;"></i>
+<div class="node-title">Input</div>
+<span class="node-detail">224×224×3</span>
+</div>
+</div>
+<!-- Arrow -->
+<div class="arrow-connector"></div>
+<!-- Layer 1 -->
+<div class="node node-conv">
+<div class="node-box">
+<div class="node-title">Block 1</div>
+<span class="node-detail">Conv (3→16)</span>
+<span class="node-detail">ReLU + MaxPool</span>
+</div>
+</div>
+<!-- Arrow -->
+<div class="arrow-connector"></div>
+<!-- Layer 2 -->
+<div class="node node-conv">
+<div class="node-box">
+<div class="node-title">Block 2</div>
+<span class="node-detail">Conv (16→32)</span>
+<span class="node-detail">ReLU + MaxPool</span>
+</div>
+</div>
+<!-- Arrow -->
+<div class="arrow-connector"></div>
+<!-- Layer 3 -->
+<div class="node node-conv">
+<div class="node-box">
+<div class="node-title">Block 3</div>
+<span class="node-detail">Conv (32→64)</span>
+<span class="node-detail">ReLU + MaxPool</span>
+</div>
+</div>
+<!-- Arrow -->
+<div class="arrow-connector"></div>
+<!-- Dense Head -->
+<div class="node node-dense">
+<div class="node-box">
+<div class="node-title">Classifier</div>
+<span class="node-detail">Flatten</span>
+<span class="node-detail">Dense(128) + Drop</span>
+</div>
+</div>
+<!-- Arrow -->
+<div class="arrow-connector"></div>
+<!-- Output -->
+<div class="node node-output">
+<div class="node-box">
+<div class="node-title">Output</div>
+<span class="node-detail" style="background-color: rgba(16, 185, 129, 0.1); color: #047857; font-weight: 700;">Sigmoid</span>
+<span class="node-detail">2 Classes</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom: Details Cards -->
+<div class="details-row">
+<!-- Card 1: Specs -->
+<div class="detail-card card-specs">
+<div class="card-header">
+<div class="card-icon"><i class="fas fa-cogs"></i></div>
+<h3 class="card-title">Key Features</h3>
+</div>
+<ul class="feature-list">
+<li class="feature-item">
+<i class="fas fa-microchip"></i>
+<p>~6.5 million trainable parameters</p>
+</li>
+<li class="feature-item">
+<i class="fas fa-layer-group"></i>
+<p>Fully trained from scratch (random init)</p>
+</li>
+<li class="feature-item">
+<i class="fas fa-compress-arrows-alt"></i>
+<p>Input resized to 224×224 pixels</p>
+</li>
+</ul>
+</div>
+<!-- Card 2: Strategy -->
+<div class="detail-card card-strategy">
+<div class="card-header">
+<div class="card-icon"><i class="fas fa-chess-knight"></i></div>
+<h3 class="card-title">Handling Imbalance</h3>
+</div>
+<ul class="feature-list">
+<li class="feature-item">
+<i class="fas fa-balance-scale"></i>
+<p><strong>Class Weights:</strong> Penalize Normal mistakes ~3× more</p>
+</li>
+<li class="feature-item">
+<i class="fas fa-random"></i>
+<p><strong>Augmentation:</strong> Random horizontal flips during training</p>
+</li>
+<li class="feature-item">
+<i class="fas fa-ban"></i>
+<p><strong>Dropout:</strong> 50% rate to reduce overfitting</p>
+</li>
+</ul>
+</div>
+<!-- Card 3: Training -->
+<div class="detail-card card-training">
+<div class="card-header">
+<div class="card-icon"><i class="fas fa-stopwatch"></i></div>
+<h3 class="card-title">Training Specs</h3>
+</div>
+<ul class="feature-list">
+<li class="feature-item">
+<i class="fas fa-sync-alt"></i>
+<p><strong>Epochs:</strong> 10 total epochs</p>
+</li>
+<li class="feature-item">
+<i class="fas fa-clock"></i>
+<p><strong>Time:</strong> ~15 minutes on standard CPU</p>
+</li>
+<li class="feature-item">
+<i class="fas fa-chart-line"></i>
+<p><strong>Optimizer:</strong> Adam (LR = 0.001)</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>
